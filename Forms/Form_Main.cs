@@ -18,6 +18,8 @@ namespace CaptureWindow
 {
     public partial class Form_Main : Form
     {
+        // This is my test commit
+
         public TabPage selectedTab;
         TabControlManager tabControlManager;
         public Form_Main()
