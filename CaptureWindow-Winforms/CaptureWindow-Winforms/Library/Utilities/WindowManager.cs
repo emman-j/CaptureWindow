@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static CaptureWindow_Winforms.Library.Common.NativeInterop.Win32;
 
 
@@ -28,7 +29,6 @@ namespace CaptureWindow_Winforms.Library.Utilities
         private IntPtr dllHandle = IntPtr.Zero;
         private CancellationTokenSource cancellationTokenSource;
         private Thread backgroundThread;
-        private List<IntPtr> _openAppHandles = new List<IntPtr>();
 
         public WindowManager()
         { }
@@ -41,20 +41,18 @@ namespace CaptureWindow_Winforms.Library.Utilities
             GetWindowText(hWnd, sb, sb.Capacity);
             return sb.ToString();
         }
-        private void GetOpenApplications()
+        private List<IntPtr> GetOpenApplicationHandles()
         {
-            _openAppHandles.Clear();
-
+            var handles = new List<IntPtr>();
             EnumWindows((hWnd, lParam) =>
             {
-                GetWindowThreadProcessId(hWnd, out uint processId);
-                if (IsWindowVisible(hWnd) && !string.IsNullOrEmpty(GetWindowTitle(hWnd)))
+                if (IsWindowVisible(hWnd))
                 {
-                    _openAppHandles.Add(hWnd);
-                    return true; // Continue enumerating
+                    handles.Add(hWnd);
                 }
-                return true; // Continue enumerating
+                return true;
             }, IntPtr.Zero);
+            return handles;
         }
         private IntPtr GetMainWindowHandle(int processId)
         {
@@ -131,7 +129,22 @@ namespace CaptureWindow_Winforms.Library.Utilities
             }
         }
 
+        public Dictionary<string, IntPtr> GetOpenApplications()
+        { 
+            Dictionary<string, IntPtr> OpenApps = new Dictionary<string, IntPtr>();
 
+            List<IntPtr> handles = GetOpenApplicationHandles();
+            foreach (IntPtr handle in handles)
+            {
+                string title = GetWindowTitle(handle);
+                if (!string.IsNullOrEmpty(title))
+                {
+                    if (OpenApps.ContainsKey(title)) title += " 1";
+                    OpenApps.Add(title, handle);
+                }
+            }
+            return OpenApps;
+        }
         public void CleanUp()
         {
             StopBackgroundThreads();
@@ -284,6 +297,71 @@ namespace CaptureWindow_Winforms.Library.Utilities
                 CleanUp();
             }
         }
+        public void LaunchAndDockApp(Form form)
+        {
+            string selectedFile = "";
+            string fileNameWithoutExtension = "";
+
+            try
+            {
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    openFileDialog.InitialDirectory = @"C:\Users\admin\Documents\Training";
+                    openFileDialog.Title = "Select App";
+                    openFileDialog.Filter = "Executable files (*.exe)|*.exe|Application shortcuts (*.lnk)|*.lnk|All files (*.*)|*.*";
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        selectedFile = openFileDialog.FileName;
+                        fileNameWithoutExtension = Path.GetFileNameWithoutExtension(selectedFile);
+                    }
+                    else
+                    {
+                        CleanUp();
+                        return;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(selectedFile))
+                {
+                    CleanUp();
+                    return;
+                }
+
+                // Start the external application
+                Process process = Process.Start(selectedFile);
+                if (!WaitForMainWindow(process))
+                {
+                    MessageBox.Show("Failed to find the application window.");
+                    return;
+                }
+                //process.WaitForInputIdle(); // Wait for the process to be ready
+
+                // Find the window handle of the most recent window for the process
+                _embeddedAppHandle = GetMainWindowHandle(process.Id);
+                if (_embeddedAppHandle == IntPtr.Zero)
+                {
+                    MessageBox.Show("Failed to find the application window.");
+                    return;
+                }
+
+                // Set the parent of the external application window to the panel
+                //SendKeys.SendWait("{F11}");
+                SetParent(_embeddedAppHandle, form.Handle);
+                ShowWindow(_embeddedAppHandle, SW_SHOW);
+
+                // Adjust size and position of the embedded window
+                form.Text = fileNameWithoutExtension;
+
+                //ResizeAndDockApp(form);
+                //_tabAppHandles[form] = _embeddedAppHandle;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}");
+                CleanUp();
+            }
+        }
         public void ResizeAndDockApp(Panel panel)
         {
             if (_embeddedAppHandle != IntPtr.Zero)
@@ -394,6 +472,15 @@ namespace CaptureWindow_Winforms.Library.Utilities
             // Adjust size and position of the embedded window
             ResizeAndDockApp(tabPage, selectedAppHandle);
             _tabAppHandles[tabPage] = selectedAppHandle;
+        }
+
+        public void ReleaseCapture()
+        {
+            Win32.ReleaseCapture();
+        }
+        public void SendMessage(nint handle, uint v1, nint v2, nint v3)
+        {
+            Win32.SendMessage(handle, v1, v2, v3);
         }
     }
 }
