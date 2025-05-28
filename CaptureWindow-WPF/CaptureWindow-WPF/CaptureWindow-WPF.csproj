@@ -7,7 +7,7 @@
     <ProjectGuid>{0A9E208D-D2A7-4866-91D1-3EF570245C03}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>CaptureWindow_WPF</RootNamespace>
-    <AssemblyName>CaptureWindow_WPF</AssemblyName>
+    <AssemblyName>CaptureWindow-WPF</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -53,6 +53,7 @@
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
