@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Forms\" />
     <Folder Include="Library\Common\Enums\" />
     <Folder Include="Resources\" />
   </ItemGroup>

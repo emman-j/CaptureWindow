@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaptureWindow", "CaptureWindowTest\CaptureWindow.csproj", "{4538A9FA-4A31-420F-B986-E793CA7A106D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "(Obsolete)CaptureWindow", "CaptureWindowTest\(Obsolete)CaptureWindow.csproj", "{4538A9FA-4A31-420F-B986-E793CA7A106D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaptureWindow-Winforms", "CaptureWindow-Winforms\CaptureWindow-Winforms\CaptureWindow-Winforms.csproj", "{C324A64F-CFCF-4A09-8151-93D82179F9D6}"
 EndProject
