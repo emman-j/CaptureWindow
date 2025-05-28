@@ -75,6 +75,15 @@ namespace CaptureWindow
             TabPage secondToLastTab = tabControlManager.GetSecondToLastTab();
             tabControl1.SelectedTab = secondToLastTab; 
         }  
+        private void panel2_MouseDown(object sender, MouseEventArgs e)
+        {
+            Form parentForm = this.FindForm();
+            if (parentForm != null)
+            {
+                WindowAppManager.ReleaseCapture();
+                WindowAppManager.SendMessage(parentForm.Handle, 0x112, 0xf012, 0);
+            }
+        }
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (components != null)
@@ -85,6 +94,8 @@ namespace CaptureWindow
             WindowAppManager.CloseAllEmbeddedApps();
             this.Close();
         } 
+
+
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             WindowAppManager.LaunchAndDockApp(selectedTab);
@@ -110,15 +121,6 @@ namespace CaptureWindow
         {
             WindowAppManager.UndockApp(selectedTab);
         } 
-        private void panel2_MouseDown(object sender, MouseEventArgs e)
-        {
-            Form parentForm = this.FindForm();
-            if (parentForm != null)
-            {
-                WindowAppManager.ReleaseCapture();
-                WindowAppManager.SendMessage(parentForm.Handle, 0x112, 0xf012, 0);
-            }
-        }
 
         bool isbuttonpressed = false;
         private void label1_MouseUpDown(object sender, MouseEventArgs e)
