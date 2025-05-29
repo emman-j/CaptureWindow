@@ -18,7 +18,7 @@ namespace CaptureWindow_Winforms.Library.Utilities
         {
             _tabControl = tabControl;
             _windowManager = new WindowManager();
-            selectedTab = new TabPage();
+            selectedTab = _tabControl.TabPages[0];
             _tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
             _tabControl.DoubleClick += TabControl_DoubleClick;
         }
@@ -26,7 +26,7 @@ namespace CaptureWindow_Winforms.Library.Utilities
         {
             _tabControl = tabControl;
             _windowManager = windowManager;
-            selectedTab = new TabPage();
+            selectedTab = _tabControl.TabPages[0];
             _tabControl.SelectedIndexChanged += TabControl_SelectedIndexChanged;
             _tabControl.DoubleClick += TabControl_DoubleClick;
         }
