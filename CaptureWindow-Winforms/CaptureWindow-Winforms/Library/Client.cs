@@ -1,25 +1,76 @@
 ﻿using CaptureWindow_Winforms.Forms;
+using CaptureWindow_Winforms.Library.Common.Enums;
 using CaptureWindow_Winforms.Library.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CaptureWindow_Winforms.Library
 {
-    public class Client
+    public class Client: INotifyPropertyChanged
     {
-        internal TabControl tabControl;
+        private DockingMode _dockingMode;
+
+        internal TabControl TabView;
+        internal Panel PanelView;
         internal TabManager tabManager;
         internal WindowManager windowManager;
 
-        public Client(TabControl tabControl)
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public DockingMode DockingMode
+        {
+            get => _dockingMode;
+            set
+            {
+                if (_dockingMode != value)
+                {
+                    _dockingMode = value;
+                    NotifyPropertyChanged();
+                    DockingChanged(_dockingMode);
+                }
+            }
+        }
+
+        public Client(TabControl tabControl, Panel panelControl)
         {
             windowManager = new WindowManager();
             tabManager = new TabManager(tabControl, windowManager);
-            this.tabControl = tabControl;
+            TabView = tabControl;
+            PanelView = panelControl;
+        }
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyname = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+        }
+        private void DockingChanged(DockingMode dockingMode)
+        {
+            void Enable(Control control)
+            {
+                control.Visible = true;
+                control.Dock = DockStyle.Fill;
+            }
+            void Disable(Control control)
+            {
+                control.Dock = DockStyle.None;
+                control.Visible = false;
+            }
+
+            if (dockingMode == DockingMode.Tab)
+            {
+                Disable(PanelView);
+                Enable(TabView);
+            }
+            else if (dockingMode == DockingMode.Window)
+            {
+                Disable(TabView);
+                Enable(PanelView);
+            }
         }
 
         public void Close()
