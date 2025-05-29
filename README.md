@@ -25,9 +25,9 @@ Designed to enhance workspace efficiency, these tools allow users to capture scr
 
 ### Prerequisites
 
-- **Operating System**: Windows 10 or later
+- **Operating System**: Windows 7 or later
 - **Development Environment**: Visual Studio 2019 or newer
-- **.NET Framework**: .NET 6.0 or later
+- **.NET Framework**: .NET 8.0 or later
 
 ### Build Instructions
 
