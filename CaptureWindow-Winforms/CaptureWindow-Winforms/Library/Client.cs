@@ -1,25 +1,160 @@
 ﻿using CaptureWindow_Winforms.Forms;
+using CaptureWindow_Winforms.Library.Common.Enums;
 using CaptureWindow_Winforms.Library.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CaptureWindow_Winforms.Library
 {
-    public class Client
+    public class Client: INotifyPropertyChanged
     {
-        internal TabControl tabControl;
+        private DockingMode _dockingMode;
+
+        internal TabControl TabView;
+        internal Panel PanelView;
+        internal Panel WindowPanel;
+        internal FlowLayoutPanel WindowFlowLayoutPanel;
         internal TabManager tabManager;
         internal WindowManager windowManager;
+        internal Form SelectedForm;
 
-        public Client(TabControl tabControl)
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public DockingMode DockingMode
+        {
+            get => _dockingMode;
+            set
+            {
+                if (_dockingMode != value)
+                {
+                    _dockingMode = value;
+                    NotifyPropertyChanged();
+                    DockingChanged(_dockingMode);
+                }
+            }
+        }
+
+        public Client(TabControl tabControl, Panel panelControl, Panel windowPanel, FlowLayoutPanel flowLayoutPanel)
         {
             windowManager = new WindowManager();
             tabManager = new TabManager(tabControl, windowManager);
-            this.tabControl = tabControl;
+            TabView = tabControl;
+            PanelView = panelControl;
+            WindowPanel = windowPanel;
+            WindowFlowLayoutPanel = flowLayoutPanel;
+
+            DockingMode = DockingMode.Tab; // Default
+        }
+
+        private void NotifyPropertyChanged([CallerMemberName] string propertyname = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+        }
+        private void DockingChanged(DockingMode dockingMode)
+        {
+            void Enable(Control control , DockStyle dock = DockStyle.Fill)
+            {
+                control.Visible = true;
+                control.Dock = dock;
+            }
+            void Disable(Control control)
+            {
+                control.Dock = DockStyle.None;
+                control.Visible = false;
+            }
+
+            if (dockingMode == DockingMode.Tab)
+            {
+                Disable(WindowPanel);
+                Enable(TabView);
+            }
+            else if (dockingMode == DockingMode.Window)
+            {
+                Disable(TabView);
+                Enable(WindowPanel);
+            }
+        }
+        private void AddSideBarButton(Form form)
+        {
+            Button taskbarButton = new Button
+            {
+                Text = form.Text,
+                Width = 125,
+                Tag = form
+            };
+
+            taskbarButton.Click += (s, e) =>
+            {
+                if (form.WindowState == FormWindowState.Minimized)
+                { 
+                    form.WindowState = FormWindowState.Maximized;
+                    form.Show();
+                    form.WindowState = FormWindowState.Maximized;
+
+                }
+                else if (form.WindowState == FormWindowState.Normal || form.WindowState == FormWindowState.Maximized)
+                { 
+                    form.WindowState = FormWindowState.Minimized;
+                    form.Hide();
+                }
+            };
+
+            form.FormClosed += (s, e) =>
+            {
+                WindowFlowLayoutPanel.Controls.Remove(taskbarButton);
+            };
+
+            WindowFlowLayoutPanel.Controls.Add(taskbarButton);
+        }
+        private Form CreateChildForm()
+        { 
+            Child_Form child_Form = new Child_Form
+            {
+                TopLevel = false,
+                FormBorderStyle = FormBorderStyle.Sizable,
+                Size = new Size(400, 200),
+                Location = new Point(20, 20)
+            };
+            child_Form.Dock = DockStyle.None;
+
+            void SelectForm(object? sender, EventArgs e)
+            {
+                child_Form.BringToFront();
+                SelectedForm = child_Form;
+            }
+
+            child_Form.MouseDown += SelectForm;
+            child_Form.Move += SelectForm;
+
+            child_Form.FormClosing += (s, e) =>
+            {
+                windowManager.CloseTabHandle(child_Form);
+            };
+
+            child_Form.Resize += (s, e) =>
+            {
+                windowManager.ResizeAndDockApp(child_Form);
+
+                switch (child_Form.WindowState)
+                {
+                    case FormWindowState.Normal:
+                        child_Form.Show();
+                        break;
+                    case FormWindowState.Minimized:
+                        child_Form.Hide();
+                        break;
+                    case FormWindowState.Maximized:
+                        child_Form.Show();
+                        break;
+                }
+            };
+
+            return child_Form;
         }
 
         public void Close()
@@ -31,8 +166,8 @@ namespace CaptureWindow_Winforms.Library
 
         public void FormResized()
         {
-            if (tabManager.selectedTab == null) return;
-            windowManager.ResizeAndDockApp(tabManager.selectedTab);
+            if (DockingMode == DockingMode.Tab && tabManager.selectedTab != null)
+                windowManager.ResizeAndDockApp(tabManager.selectedTab);
         }
 
         public void TitleBarMouseDown(Control control)
@@ -51,11 +186,25 @@ namespace CaptureWindow_Winforms.Library
         }
         public void LauchAndDock()
         {
-            windowManager.LaunchAndDockApp(tabManager.selectedTab);
+            if (DockingMode == DockingMode.Tab)
+                windowManager.LaunchAndDockApp(tabManager.selectedTab);
+            else if (DockingMode == DockingMode.Window)
+            {
+                Form child = CreateChildForm();
+                PanelView.Controls.Add(child);
+                child.Show();
+                windowManager.LaunchAndDockApp(child);
+                AddSideBarButton(child);
+                windowManager.ResizeAndDockApp(child);
+                SelectedForm = child;
+            }
         }
         public void UndockApp()
         {
-            windowManager.UndockApp(tabManager.selectedTab);
+            if(DockingMode == DockingMode.Tab)
+                windowManager.UndockApp(tabManager.selectedTab);
+            else if (DockingMode == DockingMode.Window && SelectedForm != null)
+                windowManager.UndockApp(SelectedForm);
         }
         public void UndockAllApp()
         {
@@ -71,10 +220,15 @@ namespace CaptureWindow_Winforms.Library
                     IntPtr selectedAppHandle = selectionForm.SelectedApp.Handle;
                     string selectedAppTitle = selectionForm.SelectedApp.Title;
 
-                    if (selectedAppHandle != IntPtr.Zero && tabManager.selectedTab != null)
+                    if (selectedAppHandle != IntPtr.Zero && tabManager.selectedTab != null && DockingMode == DockingMode.Tab)
                     {
                         windowManager.EmbedSelectedApp(selectedAppHandle, tabManager.selectedTab);
                         tabManager.selectedTab.Text = selectedAppTitle;
+                    }
+                    else if (selectedAppHandle != IntPtr.Zero && SelectedForm != null && DockingMode == DockingMode.Window)
+                    {
+                        windowManager.EmbedSelectedApp(selectedAppHandle, SelectedForm);
+                        SelectedForm.Text = selectedAppTitle;
                     }
                 }
             }
@@ -82,24 +236,30 @@ namespace CaptureWindow_Winforms.Library
 
         public void ChangeTabName()
         {
-
-            if (tabManager.selectedTab != null)
+            bool GetNewName(string oldName, out string newName)
             {
+                newName = string.Empty;
                 using (TabRename_Form changeTabNameForm = new TabRename_Form())
                 {
-
-                    changeTabNameForm.TabName = tabManager.selectedTab.Text;
+                    changeTabNameForm.TabName = oldName;
 
                     if (changeTabNameForm.ShowDialog() == DialogResult.OK)
                     {
-                        tabManager.selectedTab.Text = changeTabNameForm.TabName;
+                        newName = changeTabNameForm.TabName;
+                        return true;
                     }
+                    return false;
                 }
             }
+
+            if (DockingMode == DockingMode.Tab && tabManager.selectedTab != null && GetNewName(tabManager.selectedTab.Text, out string tabName))
+                tabManager.selectedTab.Text = tabName;
+
+            else if(DockingMode == DockingMode.Window && SelectedForm != null && GetNewName(SelectedForm.Text, out string winName))
+                SelectedForm.Text = winName;
+
             else
-            {
                 MessageBox.Show("No tab selected to rename!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
     }
 }

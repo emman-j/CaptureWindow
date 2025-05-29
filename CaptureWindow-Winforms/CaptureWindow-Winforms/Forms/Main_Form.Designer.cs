@@ -42,11 +42,21 @@
             undockAllAppToolStripMenuItem = new ToolStripMenuItem();
             editToolStripMenuItem = new ToolStripMenuItem();
             chToolStripMenuItem = new ToolStripMenuItem();
+            dockmodeToolStripMenuItem1 = new ToolStripMenuItem();
+            TabsModeToolStripMenuItem = new ToolStripMenuItem();
+            WindowsModeToolStripMenuItem = new ToolStripMenuItem();
             tabControl1 = new TabControl();
             tabPage2 = new TabPage();
+            panel1 = new Panel();
+            SidePanel = new Panel();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            label2 = new Label();
+            WindowViewPanel = new Panel();
             panel2.SuspendLayout();
             menuStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
+            SidePanel.SuspendLayout();
+            WindowViewPanel.SuspendLayout();
             SuspendLayout();
             // 
             // tabPage1
@@ -56,7 +66,7 @@
             tabPage1.Margin = new Padding(4, 3, 4, 3);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(4, 3, 4, 3);
-            tabPage1.Size = new Size(792, 503);
+            tabPage1.Size = new Size(324, 185);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "New tab";
             // 
@@ -93,11 +103,11 @@
             menuStrip1.AutoSize = false;
             menuStrip1.BackColor = Color.FromArgb(43, 43, 43);
             menuStrip1.Dock = DockStyle.None;
-            menuStrip1.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem, dockToolStripMenuItem, editToolStripMenuItem });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { menuToolStripMenuItem, dockToolStripMenuItem, editToolStripMenuItem, dockmodeToolStripMenuItem1 });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(7, 2, 0, 2);
-            menuStrip1.Size = new Size(167, 28);
+            menuStrip1.Size = new Size(261, 28);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -140,7 +150,7 @@
             openAppToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
             openAppToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
             openAppToolStripMenuItem.Name = "openAppToolStripMenuItem";
-            openAppToolStripMenuItem.Size = new Size(180, 22);
+            openAppToolStripMenuItem.Size = new Size(158, 22);
             openAppToolStripMenuItem.Text = "&Open App";
             openAppToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
@@ -149,7 +159,7 @@
             dockOpenAppToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
             dockOpenAppToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
             dockOpenAppToolStripMenuItem.Name = "dockOpenAppToolStripMenuItem";
-            dockOpenAppToolStripMenuItem.Size = new Size(180, 22);
+            dockOpenAppToolStripMenuItem.Size = new Size(158, 22);
             dockOpenAppToolStripMenuItem.Text = "&Dock Open App";
             dockOpenAppToolStripMenuItem.Click += dockOpenAppToolStripMenuItem_Click;
             // 
@@ -158,7 +168,7 @@
             undockAppToolStripMenuItem1.BackColor = Color.FromArgb(43, 43, 43);
             undockAppToolStripMenuItem1.ForeColor = Color.FromArgb(209, 209, 209);
             undockAppToolStripMenuItem1.Name = "undockAppToolStripMenuItem1";
-            undockAppToolStripMenuItem1.Size = new Size(180, 22);
+            undockAppToolStripMenuItem1.Size = new Size(158, 22);
             undockAppToolStripMenuItem1.Text = "&Undock App";
             undockAppToolStripMenuItem1.Click += undockAppToolStripMenuItem1_Click;
             // 
@@ -167,7 +177,7 @@
             undockAllAppToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
             undockAllAppToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
             undockAllAppToolStripMenuItem.Name = "undockAllAppToolStripMenuItem";
-            undockAllAppToolStripMenuItem.Size = new Size(180, 22);
+            undockAllAppToolStripMenuItem.Size = new Size(158, 22);
             undockAllAppToolStripMenuItem.Text = "U&ndock All App";
             undockAllAppToolStripMenuItem.Click += undockAllAppToolStripMenuItem_Click;
             // 
@@ -184,22 +194,51 @@
             chToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
             chToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
             chToolStripMenuItem.Name = "chToolStripMenuItem";
-            chToolStripMenuItem.Size = new Size(180, 22);
+            chToolStripMenuItem.Size = new Size(171, 22);
             chToolStripMenuItem.Text = "&Change Tab Name";
             chToolStripMenuItem.Click += chToolStripMenuItem_Click;
+            // 
+            // dockmodeToolStripMenuItem1
+            // 
+            dockmodeToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { TabsModeToolStripMenuItem, WindowsModeToolStripMenuItem });
+            dockmodeToolStripMenuItem1.ForeColor = Color.FromArgb(209, 209, 209);
+            dockmodeToolStripMenuItem1.Name = "dockmodeToolStripMenuItem1";
+            dockmodeToolStripMenuItem1.Size = new Size(97, 24);
+            dockmodeToolStripMenuItem1.Text = "Docking &Mode";
+            // 
+            // TabsModeToolStripMenuItem
+            // 
+            TabsModeToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
+            TabsModeToolStripMenuItem.Checked = true;
+            TabsModeToolStripMenuItem.CheckOnClick = true;
+            TabsModeToolStripMenuItem.CheckState = CheckState.Checked;
+            TabsModeToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
+            TabsModeToolStripMenuItem.Name = "TabsModeToolStripMenuItem";
+            TabsModeToolStripMenuItem.Size = new Size(157, 22);
+            TabsModeToolStripMenuItem.Text = "&Tabs Mode";
+            TabsModeToolStripMenuItem.Click += DockingModeToolStripMenuItem_Click;
+            // 
+            // WindowsModeToolStripMenuItem
+            // 
+            WindowsModeToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
+            WindowsModeToolStripMenuItem.CheckOnClick = true;
+            WindowsModeToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
+            WindowsModeToolStripMenuItem.Name = "WindowsModeToolStripMenuItem";
+            WindowsModeToolStripMenuItem.Size = new Size(157, 22);
+            WindowsModeToolStripMenuItem.Text = "&Windows Mode";
+            WindowsModeToolStripMenuItem.Click += DockingModeToolStripMenuItem_Click;
             // 
             // tabControl1
             // 
             tabControl1.Appearance = TabAppearance.Buttons;
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
-            tabControl1.Dock = DockStyle.Fill;
-            tabControl1.Location = new Point(0, 30);
+            tabControl1.Location = new Point(437, 76);
             tabControl1.Margin = new Padding(4, 3, 4, 3);
             tabControl1.Multiline = true;
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(800, 534);
+            tabControl1.Size = new Size(332, 216);
             tabControl1.TabIndex = 5;
             // 
             // tabPage2
@@ -210,15 +249,64 @@
             tabPage2.Margin = new Padding(4, 3, 4, 3);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(4, 3, 4, 3);
-            tabPage2.Size = new Size(792, 503);
+            tabPage2.Size = new Size(324, 185);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "+";
+            // 
+            // panel1
+            // 
+            panel1.BackColor = Color.FromArgb(56, 57, 60);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(134, 0);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(281, 317);
+            panel1.TabIndex = 6;
+            // 
+            // SidePanel
+            // 
+            SidePanel.Controls.Add(flowLayoutPanel1);
+            SidePanel.Controls.Add(label2);
+            SidePanel.Dock = DockStyle.Left;
+            SidePanel.Location = new Point(0, 0);
+            SidePanel.Name = "SidePanel";
+            SidePanel.Size = new Size(134, 317);
+            SidePanel.TabIndex = 7;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.AutoScroll = true;
+            flowLayoutPanel1.Dock = DockStyle.Fill;
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(0, 15);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(134, 302);
+            flowLayoutPanel1.TabIndex = 1;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Top;
+            label2.Location = new Point(0, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(56, 15);
+            label2.TabIndex = 0;
+            label2.Text = "Windows";
+            // 
+            // WindowViewPanel
+            // 
+            WindowViewPanel.Controls.Add(panel1);
+            WindowViewPanel.Controls.Add(SidePanel);
+            WindowViewPanel.Location = new Point(223, 192);
+            WindowViewPanel.Name = "WindowViewPanel";
+            WindowViewPanel.Size = new Size(415, 317);
+            WindowViewPanel.TabIndex = 8;
             // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 564);
+            Controls.Add(WindowViewPanel);
             Controls.Add(tabControl1);
             Controls.Add(panel2);
             Name = "Main";
@@ -230,6 +318,9 @@
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             tabControl1.ResumeLayout(false);
+            SidePanel.ResumeLayout(false);
+            SidePanel.PerformLayout();
+            WindowViewPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -251,5 +342,13 @@
         private ToolStripMenuItem chToolStripMenuItem;
         private TabControl tabControl1;
         private TabPage tabPage2;
+        private ToolStripMenuItem dockmodeToolStripMenuItem1;
+        private ToolStripMenuItem TabsModeToolStripMenuItem;
+        private ToolStripMenuItem WindowsModeToolStripMenuItem;
+        private Panel panel1;
+        private Panel SidePanel;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label label2;
+        private Panel WindowViewPanel;
     }
 }
