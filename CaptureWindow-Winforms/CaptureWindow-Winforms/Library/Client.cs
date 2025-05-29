@@ -163,13 +163,11 @@ namespace CaptureWindow_Winforms.Library
             windowManager.CloseAllEmbeddedApps();
             Application.Exit();
         }
-
         public void FormResized()
         {
             if (DockingMode == DockingMode.Tab && tabManager.selectedTab != null)
                 windowManager.ResizeAndDockApp(tabManager.selectedTab);
         }
-
         public void TitleBarMouseDown(Control control)
         {
             Form parentForm = control.Parent.FindForm();
@@ -180,10 +178,6 @@ namespace CaptureWindow_Winforms.Library
             }
         }
 
-        public void LauchAndDock(Form form)
-        { 
-            windowManager.LaunchAndDockApp(form);
-        }
         public void LauchAndDock()
         {
             if (DockingMode == DockingMode.Tab)
@@ -233,7 +227,6 @@ namespace CaptureWindow_Winforms.Library
                 }
             }
         }
-
         public void ChangeTabName()
         {
             bool GetNewName(string oldName, out string newName)
