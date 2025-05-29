@@ -234,20 +234,28 @@ namespace CaptureWindow_Winforms.Library
 
         public void ChangeTabName()
         {
-
-            if (tabManager.selectedTab != null)
+            bool GetNewName(string oldName, out string newName)
             {
+                newName = string.Empty;
                 using (TabRename_Form changeTabNameForm = new TabRename_Form())
                 {
-
-                    changeTabNameForm.TabName = tabManager.selectedTab.Text;
+                    changeTabNameForm.TabName = oldName;
 
                     if (changeTabNameForm.ShowDialog() == DialogResult.OK)
                     {
-                        tabManager.selectedTab.Text = changeTabNameForm.TabName;
+                        newName = changeTabNameForm.TabName;
+                        return true;
                     }
+                    return false;
                 }
             }
+
+            if (DockingMode == DockingMode.Tab && tabManager.selectedTab != null && GetNewName(tabManager.selectedTab.Text, out string tabName))
+                tabManager.selectedTab.Text = tabName;
+
+            else if(DockingMode == DockingMode.Window && SelectedForm != null && GetNewName(SelectedForm.Text, out string winName))
+                SelectedForm.Text = winName;
+
             else
             {
                 MessageBox.Show("No tab selected to rename!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
