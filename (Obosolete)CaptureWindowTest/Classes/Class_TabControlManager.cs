@@ -17,6 +17,7 @@ namespace CaptureWindow.Classes
             _tabControl = tabControl;
         }
 
+
         public void AddNewTab(string tabName)
         {
             // Create a new TabPage
