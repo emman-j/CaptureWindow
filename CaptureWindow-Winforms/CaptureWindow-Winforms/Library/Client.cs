@@ -70,8 +70,44 @@ namespace CaptureWindow_Winforms.Library
             {
                 Disable(TabView);
                 Enable(PanelView);
+        private Form CreateChildForm()
+        { 
+            Child_Form child_Form = new Child_Form
+            {
+                TopLevel = false,
+                FormBorderStyle = FormBorderStyle.Sizable,
+                Size = new Size(400, 200),
+                Location = new Point(20, 20)
+            };
+
+            child_Form.Dock = DockStyle.None;
+
+            child_Form.MouseDown += (s, e) =>
+            {
+                child_Form.BringToFront();
+            };
+
+            child_Form.Resize += (s, e) =>
+            {
+                windowManager.ResizeAndDockApp(child_Form);
+
+                switch (child_Form.WindowState)
+                {
+                    case FormWindowState.Normal:
+                        child_Form.Show();
+                        break;
+                    case FormWindowState.Minimized:
+                        child_Form.Hide();
+                        break;
+                    case FormWindowState.Maximized:
+                        child_Form.Show();
+                        break;
             }
+            };
+
+            return child_Form;
         }
+
 
         public void Close()
         {
