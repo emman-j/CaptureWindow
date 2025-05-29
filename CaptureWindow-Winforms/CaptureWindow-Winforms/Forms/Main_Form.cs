@@ -22,6 +22,8 @@ namespace CaptureWindow_Winforms.Forms
         {
             InitializeComponent();
 
+            this.DoubleBuffered = true;
+            this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.Text = string.Empty;
             this.ControlBox = false;
@@ -41,37 +43,37 @@ namespace CaptureWindow_Winforms.Forms
             {
                 components.Dispose();
             }
-            client.Close();
+            client?.Close();
         }
         private void Main_SizeChanged(object sender, EventArgs e)
         {
-            client.FormResized();
+            client?.FormResized();
         }
 
         private void TitleBarPanel_MouseDown(object sender, MouseEventArgs e)
         {
-            client.TitleBarMouseDown((Control)sender);
+            client?.TitleBarMouseDown((Control)sender);
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            client.LauchAndDock();
+            client?.LauchAndDock();
         }
         private void dockOpenAppToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            client.SelectOpenApp();
+            client?.SelectOpenApp();
         }
         private void undockAppToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            client.UndockApp();
+            client?.UndockApp();
         }
         private void undockAllAppToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            client.UndockAllApp();
+            client?.UndockAllApp();
         }
         private void chToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            client.ChangeTabName();
+            client?.ChangeTabName();
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
