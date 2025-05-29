@@ -198,11 +198,16 @@ namespace CaptureWindow_Winforms.Library
                 child.Show();
                 windowManager.LaunchAndDockApp(child);
                 AddSideBarButton(child);
+                windowManager.ResizeAndDockApp(child);
+                SelectedForm = child;
             }
         }
         public void UndockApp()
         {
+            if(DockingMode == DockingMode.Tab)
             windowManager.UndockApp(tabManager.selectedTab);
+            else if (DockingMode == DockingMode.Window && SelectedForm != null)
+                windowManager.UndockApp(SelectedForm);
         }
         public void UndockAllApp()
         {
