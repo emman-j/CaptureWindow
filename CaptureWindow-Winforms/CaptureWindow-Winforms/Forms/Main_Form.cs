@@ -39,18 +39,29 @@ namespace CaptureWindow_Winforms.Forms
         {
             client.FormResized();
         }
-
         private void TitleBarPanel_MouseDown(object sender, MouseEventArgs e)
         {
             client.TitleBarMouseDown((Control)sender);
         }
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            client.LauchAndDock();
         }
         private void dockOpenAppToolStripMenuItem_Click(object sender, EventArgs e)
         {
             client.SelectOpenApp();
+        }
+        private void undockAppToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            client.UndockApp();
+        }
+        private void undockAllAppToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            client.UndockAllApp();
+        }
+        private void chToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            client.ChangeTabName();
         }
 
         private void ExitButton_Click(object sender, EventArgs e)

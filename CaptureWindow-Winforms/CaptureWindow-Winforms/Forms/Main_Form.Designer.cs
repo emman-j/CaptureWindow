@@ -125,6 +125,7 @@
             exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             exitToolStripMenuItem.Size = new Size(128, 22);
             exitToolStripMenuItem.Text = "&Exit";
+            exitToolStripMenuItem.Click += ExitButton_Click;
             // 
             // dockToolStripMenuItem
             // 
@@ -139,15 +140,16 @@
             openAppToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
             openAppToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
             openAppToolStripMenuItem.Name = "openAppToolStripMenuItem";
-            openAppToolStripMenuItem.Size = new Size(158, 22);
+            openAppToolStripMenuItem.Size = new Size(180, 22);
             openAppToolStripMenuItem.Text = "&Open App";
+            openAppToolStripMenuItem.Click += openToolStripMenuItem_Click;
             // 
             // dockOpenAppToolStripMenuItem
             // 
             dockOpenAppToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
             dockOpenAppToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
             dockOpenAppToolStripMenuItem.Name = "dockOpenAppToolStripMenuItem";
-            dockOpenAppToolStripMenuItem.Size = new Size(158, 22);
+            dockOpenAppToolStripMenuItem.Size = new Size(180, 22);
             dockOpenAppToolStripMenuItem.Text = "&Dock Open App";
             dockOpenAppToolStripMenuItem.Click += dockOpenAppToolStripMenuItem_Click;
             // 
@@ -156,16 +158,18 @@
             undockAppToolStripMenuItem1.BackColor = Color.FromArgb(43, 43, 43);
             undockAppToolStripMenuItem1.ForeColor = Color.FromArgb(209, 209, 209);
             undockAppToolStripMenuItem1.Name = "undockAppToolStripMenuItem1";
-            undockAppToolStripMenuItem1.Size = new Size(158, 22);
+            undockAppToolStripMenuItem1.Size = new Size(180, 22);
             undockAppToolStripMenuItem1.Text = "&Undock App";
+            undockAppToolStripMenuItem1.Click += undockAppToolStripMenuItem1_Click;
             // 
             // undockAllAppToolStripMenuItem
             // 
             undockAllAppToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
             undockAllAppToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
             undockAllAppToolStripMenuItem.Name = "undockAllAppToolStripMenuItem";
-            undockAllAppToolStripMenuItem.Size = new Size(158, 22);
+            undockAllAppToolStripMenuItem.Size = new Size(180, 22);
             undockAllAppToolStripMenuItem.Text = "U&ndock All App";
+            undockAllAppToolStripMenuItem.Click += undockAllAppToolStripMenuItem_Click;
             // 
             // editToolStripMenuItem
             // 
@@ -180,8 +184,9 @@
             chToolStripMenuItem.BackColor = Color.FromArgb(43, 43, 43);
             chToolStripMenuItem.ForeColor = Color.FromArgb(209, 209, 209);
             chToolStripMenuItem.Name = "chToolStripMenuItem";
-            chToolStripMenuItem.Size = new Size(171, 22);
+            chToolStripMenuItem.Size = new Size(180, 22);
             chToolStripMenuItem.Text = "&Change Tab Name";
+            chToolStripMenuItem.Click += chToolStripMenuItem_Click;
             // 
             // tabControl1
             // 
