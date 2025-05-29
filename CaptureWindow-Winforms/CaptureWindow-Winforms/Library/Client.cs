@@ -18,6 +18,8 @@ namespace CaptureWindow_Winforms.Library
 
         internal TabControl TabView;
         internal Panel PanelView;
+        internal Panel WindowPanel;
+        internal FlowLayoutPanel WindowFlowLayoutPanel;
         internal TabManager tabManager;
         internal WindowManager windowManager;
 
@@ -36,12 +38,16 @@ namespace CaptureWindow_Winforms.Library
             }
         }
 
-        public Client(TabControl tabControl, Panel panelControl)
+        public Client(TabControl tabControl, Panel panelControl, Panel windowPanel, FlowLayoutPanel flowLayoutPanel)
         {
             windowManager = new WindowManager();
             tabManager = new TabManager(tabControl, windowManager);
             TabView = tabControl;
             PanelView = panelControl;
+            WindowPanel = windowPanel;
+            WindowFlowLayoutPanel = flowLayoutPanel;
+
+            DockingMode = DockingMode.Tab; // Default
         }
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyname = "")
@@ -138,7 +144,16 @@ namespace CaptureWindow_Winforms.Library
         }
         public void LauchAndDock()
         {
+            if (DockingMode == DockingMode.Tab)
             windowManager.LaunchAndDockApp(tabManager.selectedTab);
+            else if (DockingMode == DockingMode.Window)
+            {
+                Form child = CreateChildForm();
+                PanelView.Controls.Add(child);
+                child.Show();
+                windowManager.LaunchAndDockApp(child);
+                AddSideBarButton(child);
+            }
         }
         public void UndockApp()
         {
