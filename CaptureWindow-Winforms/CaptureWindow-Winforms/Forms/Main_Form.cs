@@ -69,5 +69,28 @@ namespace CaptureWindow_Winforms.Forms
             this.Close();
         }
 
+        private void DockingModeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem clickedItem = sender as ToolStripMenuItem;
+
+            // Get the parent menu of the clicked item
+            ToolStripItemCollection menuItems = clickedItem.GetCurrentParent().Items;
+
+            // Uncheck all menu items in the same group
+            foreach (ToolStripItem item in menuItems)
+            {
+                if (item is ToolStripMenuItem menuItem)
+                {
+                    menuItem.Checked = false;
+                }
+            }
+
+            if (clickedItem == TabsModeToolStripMenuItem)
+                DockingMode = DockingMode.Tab;
+            else if (clickedItem == WindowsModeToolStripMenuItem)
+                DockingMode = DockingMode.Window;
+
+           clickedItem.Checked = true;
+        }
     }
 }
