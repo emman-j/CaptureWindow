@@ -25,8 +25,14 @@ namespace CaptureWindow_Winforms.Forms
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.Text = string.Empty;
             this.ControlBox = false;
-            client = new Client(tabControl1, panel1);
-            client.DockingMode = DockingMode.Tab;
+
+            client = new Client
+            (
+                tabControl: tabControl1, 
+                panelControl: panel1, 
+                windowPanel: WindowViewPanel, 
+                flowLayoutPanel: flowLayoutPanel1
+            );;
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)

@@ -48,9 +48,15 @@
             tabControl1 = new TabControl();
             tabPage2 = new TabPage();
             panel1 = new Panel();
+            SidePanel = new Panel();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            label2 = new Label();
+            WindowViewPanel = new Panel();
             panel2.SuspendLayout();
             menuStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
+            SidePanel.SuspendLayout();
+            WindowViewPanel.SuspendLayout();
             SuspendLayout();
             // 
             // tabPage1
@@ -250,17 +256,57 @@
             // panel1
             // 
             panel1.BackColor = Color.FromArgb(56, 57, 60);
-            panel1.Location = new Point(289, 255);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(134, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(390, 216);
+            panel1.Size = new Size(281, 317);
             panel1.TabIndex = 6;
+            // 
+            // SidePanel
+            // 
+            SidePanel.Controls.Add(flowLayoutPanel1);
+            SidePanel.Controls.Add(label2);
+            SidePanel.Dock = DockStyle.Left;
+            SidePanel.Location = new Point(0, 0);
+            SidePanel.Name = "SidePanel";
+            SidePanel.Size = new Size(134, 317);
+            SidePanel.TabIndex = 7;
+            // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.AutoScroll = true;
+            flowLayoutPanel1.Dock = DockStyle.Fill;
+            flowLayoutPanel1.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel1.Location = new Point(0, 15);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(134, 302);
+            flowLayoutPanel1.TabIndex = 1;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Dock = DockStyle.Top;
+            label2.Location = new Point(0, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(56, 15);
+            label2.TabIndex = 0;
+            label2.Text = "Windows";
+            // 
+            // WindowViewPanel
+            // 
+            WindowViewPanel.Controls.Add(panel1);
+            WindowViewPanel.Controls.Add(SidePanel);
+            WindowViewPanel.Location = new Point(223, 192);
+            WindowViewPanel.Name = "WindowViewPanel";
+            WindowViewPanel.Size = new Size(415, 317);
+            WindowViewPanel.TabIndex = 8;
             // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 564);
-            Controls.Add(panel1);
+            Controls.Add(WindowViewPanel);
             Controls.Add(tabControl1);
             Controls.Add(panel2);
             Name = "Main";
@@ -272,6 +318,9 @@
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             tabControl1.ResumeLayout(false);
+            SidePanel.ResumeLayout(false);
+            SidePanel.PerformLayout();
+            WindowViewPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -297,5 +346,9 @@
         private ToolStripMenuItem TabsModeToolStripMenuItem;
         private ToolStripMenuItem WindowsModeToolStripMenuItem;
         private Panel panel1;
+        private Panel SidePanel;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label label2;
+        private Panel WindowViewPanel;
     }
 }
