@@ -31,6 +31,7 @@ namespace CaptureWindow_Winforms.Library
 
         public void FormResized()
         {
+            if (tabManager.selectedTab == null) return;
             windowManager.ResizeAndDockApp(tabManager.selectedTab);
         }
 
@@ -48,6 +49,18 @@ namespace CaptureWindow_Winforms.Library
         { 
             windowManager.LaunchAndDockApp(form);
         }
+        public void LauchAndDock()
+        {
+            windowManager.LaunchAndDockApp(tabManager.selectedTab);
+        }
+        public void UndockApp()
+        {
+            windowManager.UndockApp(tabManager.selectedTab);
+        }
+        public void UndockAllApp()
+        {
+            windowManager.UndockAllApp();
+        }
 
         public void SelectOpenApp()
         {
@@ -64,6 +77,28 @@ namespace CaptureWindow_Winforms.Library
                         tabManager.selectedTab.Text = selectedAppTitle;
                     }
                 }
+            }
+        }
+
+        public void ChangeTabName()
+        {
+
+            if (tabManager.selectedTab != null)
+            {
+                using (TabRename_Form changeTabNameForm = new TabRename_Form())
+                {
+
+                    changeTabNameForm.TabName = tabManager.selectedTab.Text;
+
+                    if (changeTabNameForm.ShowDialog() == DialogResult.OK)
+                    {
+                        tabManager.selectedTab.Text = changeTabNameForm.TabName;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("No tab selected to rename!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
