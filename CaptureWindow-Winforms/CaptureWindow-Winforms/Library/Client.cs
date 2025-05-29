@@ -111,7 +111,6 @@ namespace CaptureWindow_Winforms.Library
 
             WindowFlowLayoutPanel.Controls.Add(taskbarButton);
         }
-
         private Form CreateChildForm()
         { 
             Child_Form child_Form = new Child_Form
@@ -121,7 +120,6 @@ namespace CaptureWindow_Winforms.Library
                 Size = new Size(400, 200),
                 Location = new Point(20, 20)
             };
-
             child_Form.Dock = DockStyle.None;
 
             void SelectForm(object? sender, EventArgs e)
@@ -159,7 +157,6 @@ namespace CaptureWindow_Winforms.Library
             return child_Form;
         }
 
-
         public void Close()
         {
             windowManager.CleanUp();
@@ -169,8 +166,8 @@ namespace CaptureWindow_Winforms.Library
 
         public void FormResized()
         {
-            if (tabManager.selectedTab == null) return;
-            windowManager.ResizeAndDockApp(tabManager.selectedTab);
+            if (DockingMode == DockingMode.Tab && tabManager.selectedTab != null)
+                windowManager.ResizeAndDockApp(tabManager.selectedTab);
         }
 
         public void TitleBarMouseDown(Control control)
@@ -205,7 +202,7 @@ namespace CaptureWindow_Winforms.Library
         public void UndockApp()
         {
             if(DockingMode == DockingMode.Tab)
-            windowManager.UndockApp(tabManager.selectedTab);
+                windowManager.UndockApp(tabManager.selectedTab);
             else if (DockingMode == DockingMode.Window && SelectedForm != null)
                 windowManager.UndockApp(SelectedForm);
         }
@@ -223,10 +220,15 @@ namespace CaptureWindow_Winforms.Library
                     IntPtr selectedAppHandle = selectionForm.SelectedApp.Handle;
                     string selectedAppTitle = selectionForm.SelectedApp.Title;
 
-                    if (selectedAppHandle != IntPtr.Zero && tabManager.selectedTab != null)
+                    if (selectedAppHandle != IntPtr.Zero && tabManager.selectedTab != null && DockingMode == DockingMode.Tab)
                     {
                         windowManager.EmbedSelectedApp(selectedAppHandle, tabManager.selectedTab);
                         tabManager.selectedTab.Text = selectedAppTitle;
+                    }
+                    else if (selectedAppHandle != IntPtr.Zero && SelectedForm != null && DockingMode == DockingMode.Window)
+                    {
+                        windowManager.EmbedSelectedApp(selectedAppHandle, SelectedForm);
+                        SelectedForm.Text = selectedAppTitle;
                     }
                 }
             }
@@ -257,9 +259,7 @@ namespace CaptureWindow_Winforms.Library
                 SelectedForm.Text = winName;
 
             else
-            {
                 MessageBox.Show("No tab selected to rename!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
     }
 }
