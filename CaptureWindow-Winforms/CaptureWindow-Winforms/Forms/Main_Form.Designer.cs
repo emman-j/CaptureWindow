@@ -47,6 +47,7 @@
             WindowsModeToolStripMenuItem = new ToolStripMenuItem();
             tabControl1 = new TabControl();
             tabPage2 = new TabPage();
+            panel1 = new Panel();
             panel2.SuspendLayout();
             menuStrip1.SuspendLayout();
             tabControl1.SuspendLayout();
@@ -242,15 +243,24 @@
             tabPage2.Margin = new Padding(4, 3, 4, 3);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(4, 3, 4, 3);
-            tabPage2.Size = new Size(792, 503);
+            tabPage2.Size = new Size(324, 185);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "+";
+            // 
+            // panel1
+            // 
+            panel1.BackColor = Color.FromArgb(56, 57, 60);
+            panel1.Location = new Point(289, 255);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(390, 216);
+            panel1.TabIndex = 6;
             // 
             // Main
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 564);
+            Controls.Add(panel1);
             Controls.Add(tabControl1);
             Controls.Add(panel2);
             Name = "Main";
@@ -286,5 +296,6 @@
         private ToolStripMenuItem dockmodeToolStripMenuItem1;
         private ToolStripMenuItem TabsModeToolStripMenuItem;
         private ToolStripMenuItem WindowsModeToolStripMenuItem;
+        private Panel panel1;
     }
 }

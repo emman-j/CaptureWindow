@@ -14,30 +14,10 @@ using System.Windows.Forms;
 
 namespace CaptureWindow_Winforms.Forms
 {
-    public partial class Main : Form, INotifyPropertyChanged
+    public partial class Main : Form
     {
-        private DockingMode _dockingMode;
         private readonly Client client;
 
-        public DockingMode DockingMode
-        {
-            get => _dockingMode;
-            set 
-            {
-                if (_dockingMode != value)
-                { 
-                    _dockingMode = value;
-                    NotifyPropertyChanged();
-                    DockingChanged(_dockingMode);
-                }
-            }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-        private void NotifyPropertyChanged([CallerMemberName] string propertyname = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
-        }
         public Main()
         {
             InitializeComponent();
@@ -45,30 +25,8 @@ namespace CaptureWindow_Winforms.Forms
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.Text = string.Empty;
             this.ControlBox = false;
-            client = new Client(tabControl1);
-        }
-
-        private void DockingChanged(DockingMode dockingMode)
-        {
-            void Enable(Control control)
-            {
-                control.Visible = true;
-                control.Dock = DockStyle.Fill;
-            }
-            void Disable(Control control)
-            {
-                control.Dock = DockStyle.None;
-                control.Visible = false;
-            }
-
-            if (dockingMode == DockingMode.Tab)
-            {
-                Enable(tabControl1);
-            }
-            else if (dockingMode == DockingMode.Window)
-            {
-                Disable(tabControl1);
-            }
+            client = new Client(tabControl1, panel1);
+            client.DockingMode = DockingMode.Tab;
         }
 
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
@@ -132,9 +90,9 @@ namespace CaptureWindow_Winforms.Forms
             }
 
             if (clickedItem == TabsModeToolStripMenuItem)
-                DockingMode = DockingMode.Tab;
+                client.DockingMode = DockingMode.Tab;
             else if (clickedItem == WindowsModeToolStripMenuItem)
-                DockingMode = DockingMode.Window;
+                client.DockingMode = DockingMode.Window;
 
            clickedItem.Checked = true;
         }
