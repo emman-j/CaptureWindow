@@ -56,10 +56,10 @@ namespace CaptureWindow_Winforms.Library
         }
         private void DockingChanged(DockingMode dockingMode)
         {
-            void Enable(Control control)
+            void Enable(Control control , DockStyle dock = DockStyle.Fill)
             {
                 control.Visible = true;
-                control.Dock = DockStyle.Fill;
+                control.Dock = dock;
             }
             void Disable(Control control)
             {
@@ -69,13 +69,48 @@ namespace CaptureWindow_Winforms.Library
 
             if (dockingMode == DockingMode.Tab)
             {
-                Disable(PanelView);
+                Disable(WindowPanel);
                 Enable(TabView);
             }
             else if (dockingMode == DockingMode.Window)
             {
                 Disable(TabView);
-                Enable(PanelView);
+                Enable(WindowPanel);
+            }
+        }
+        private void AddSideBarButton(Form form)
+        {
+            Button taskbarButton = new Button
+            {
+                Text = form.Text,
+                Width = 125,
+                Tag = form
+            };
+
+            taskbarButton.Click += (s, e) =>
+            {
+                if (form.WindowState == FormWindowState.Minimized)
+                { 
+                    form.WindowState = FormWindowState.Maximized;
+                    form.Show();
+                    form.WindowState = FormWindowState.Maximized;
+
+                }
+                else if (form.WindowState == FormWindowState.Normal || form.WindowState == FormWindowState.Maximized)
+                { 
+                    form.WindowState = FormWindowState.Minimized;
+                    form.Hide();
+                }
+            };
+
+            form.FormClosed += (s, e) =>
+            {
+                WindowFlowLayoutPanel.Controls.Remove(taskbarButton);
+            };
+
+            WindowFlowLayoutPanel.Controls.Add(taskbarButton);
+        }
+
         private Form CreateChildForm()
         { 
             Child_Form child_Form = new Child_Form
@@ -108,7 +143,7 @@ namespace CaptureWindow_Winforms.Library
                     case FormWindowState.Maximized:
                         child_Form.Show();
                         break;
-            }
+                }
             };
 
             return child_Form;
@@ -145,7 +180,7 @@ namespace CaptureWindow_Winforms.Library
         public void LauchAndDock()
         {
             if (DockingMode == DockingMode.Tab)
-            windowManager.LaunchAndDockApp(tabManager.selectedTab);
+                windowManager.LaunchAndDockApp(tabManager.selectedTab);
             else if (DockingMode == DockingMode.Window)
             {
                 Form child = CreateChildForm();
