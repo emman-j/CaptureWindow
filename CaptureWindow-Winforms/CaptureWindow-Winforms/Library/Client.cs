@@ -22,6 +22,7 @@ namespace CaptureWindow_Winforms.Library
         internal FlowLayoutPanel WindowFlowLayoutPanel;
         internal TabManager tabManager;
         internal WindowManager windowManager;
+        internal Form SelectedForm;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public DockingMode DockingMode
@@ -123,9 +124,18 @@ namespace CaptureWindow_Winforms.Library
 
             child_Form.Dock = DockStyle.None;
 
-            child_Form.MouseDown += (s, e) =>
+            void SelectForm(object? sender, EventArgs e)
             {
                 child_Form.BringToFront();
+                SelectedForm = child_Form;
+            }
+
+            child_Form.MouseDown += SelectForm;
+            child_Form.Move += SelectForm;
+
+            child_Form.FormClosing += (s, e) =>
+            {
+                windowManager.CloseTabHandle(child_Form);
             };
 
             child_Form.Resize += (s, e) =>
