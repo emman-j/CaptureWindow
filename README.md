@@ -1,4 +1,4 @@
-# CaptureWindow
+# Window Capture (Workspace Management)
 
 **CaptureWindow** is a suite of lightweight Windows desktop applications developed in C# using both WinForms and WPF. 
 Designed to enhance workspace efficiency, these tools allow users to capture screenshots of the active window or the entire screen seamlessly. 
